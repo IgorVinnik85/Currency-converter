@@ -1,52 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { createSlice } from "@reduxjs/toolkit";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createSlice } from '@reduxjs/toolkit';
 
-export const authApi = createApi({
-  reducerPath: 'login',
+export const exchangeApi = createApi({
+  reducerPath: 'exchange',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://connections-api.herokuapp.com/',
+    baseUrl: 'http://api.exchangeratesapi.io/v1/',
   }),
 
   endpoints: builder => ({
-    register: builder.mutation({
-      query: userData => ({
-        url: '/users/signup',
-        method: 'POST',
-        body: userData,
-      }),
-    }),
-    logIn: builder.mutation({
-      query: userData => ({
-        url: '/users/login',
-        method: 'POST',
-        body: userData,
-      }),
-    }),
-    logOut: builder.mutation({
-      query: token => ({
-        url: '/users/logout',
-        method: 'POST',
-        headers: {
-          Authorization: token,
-        },
+    getExchanges: builder.query({
+      query: () => ({
+        url: 'symbols?access_key=b68e63fc48d56c45757d4e6fa865325a',
       }),
     }),
   }),
 });
 
-export const authSlice = createSlice({
-  name: "auth",
-  initialState: {
-    token: null,
-  },
-  reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
-  },
-});
-
-export const { useRegisterMutation, useLogInMutation, useLogOutMutation } = authApi;
-export const { setToken } = authSlice.actions;
-export const authtion = authSlice.reducer;
-
+export const { useGetExchangesQuery } = exchangeApi;
